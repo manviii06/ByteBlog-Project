@@ -1,0 +1,6 @@
+# Ignore environment files
+backend/.env
+
+# Ignore node_modules from both folders
+client/node_modules/
+backend/node_modules/
