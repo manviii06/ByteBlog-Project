@@ -1,0 +1,72 @@
+import React from 'react';
+import { assets } from '../assets/assets';
+import { useNavigate } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa';import { SignInButton, UserButton, useUser, } from '@clerk/clerk-react';
+
+const Header = () => {
+  const navigate = useNavigate();
+  
+  
+   const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
+  return (
+    <header className="bg-white shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-4 ">
+        {/* Logo Section */}
+        <div className="flex items-center">
+          <img
+            onClick={() => navigate('/')}
+            src={assets.logo}
+            alt="logo"
+            className="w-1 h-18 sm:w-40 cursor-pointer transition-transform hover:scale-105"
+          />
+          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500">Blogging Platform</h1>
+        </div>
+
+        {/* Nav Links + CTA */}
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex space-x-6">
+            {['Home', 'Features', 'Contact'].map((text, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  if (text === 'Home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (text === 'Features') {
+    scrollToSection('features-section');
+  }
+                }}
+                className="relative text-xl  font-serif text-gray-600 hover:text-indigo-600 transition-all duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all after:duration-300"
+              >
+                {text}
+              </button>
+            ))}
+          </nav>
+          </div>
+        <div className="flex items-center gap-2">
+          
+            <button
+              onClick={() => navigate('/Signin')}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
+            >
+               Get Signin 
+        </button> 
+        
+            <FaArrowRight className="text-indigo-600" /> 
+          
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
+
