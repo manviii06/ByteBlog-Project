@@ -39,7 +39,8 @@ app.get('/api/auth/google/callback',
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/blogs', require('./routes/blogRoutes')); 
 app.use('/api/comments', require('./routes/commentRoutes'));
-
+app.use('/api/users', require('./routes/userRoutes'))
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
