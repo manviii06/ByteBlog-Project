@@ -221,7 +221,6 @@ const LandingPage = () => {
     </button>
   </form>
 </div>
-
       
     </div>
   );

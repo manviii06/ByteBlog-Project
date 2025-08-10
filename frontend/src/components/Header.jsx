@@ -13,6 +13,7 @@ const Header = () => {
       section.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
+         
       });
     }
   };
@@ -39,10 +40,16 @@ const Header = () => {
                 key={i}
                 onClick={() => {
                   if (text === 'Home') {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else if (text === 'Features') {
-    scrollToSection('features-section');
-  }
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    navigate('/');
+                  } else if (text === 'Features') {
+                     navigate('/');
+                    scrollToSection('features-section');
+                    
+                  }
+                  else if (text === 'Contact') {
+                    navigate('/Contact-us');
+                  }
                 }}
                 className="relative text-xl  font-serif text-gray-600 hover:text-indigo-600 transition-all duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 hover:after:w-full after:bg-indigo-600 after:transition-all after:duration-300"
               >
