@@ -1,4 +1,11 @@
+import axios from 'axios';
+// for subscriber
+export const subscribeUser = async (data) => {
+  const res = await axios.post('/api/subscribe', data);
+  return res.data;
+};
 
+//for contact form
 export const sendContactMessage = async (formData) => {
   try {
     const res = await axios.post(
