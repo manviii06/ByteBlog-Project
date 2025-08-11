@@ -61,7 +61,7 @@ const Header = () => {
         <div className="flex items-center gap-2">
           
             <button
-              onClick={() => navigate('/Signin')}
+              onClick={() => navigate('/Login')}
               className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition"
             >
                Get Signin 
