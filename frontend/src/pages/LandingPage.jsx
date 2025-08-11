@@ -1,7 +1,24 @@
 import React from 'react';
 import { assets } from '../assets/assets';
-
+import { subscribeUser } from '../services/api'; 
 const LandingPage = () => {
+
+  const [email, setEmail] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await subscribeUser({ email }); // API call
+      setStatusMessage("✅ Subscription successful!");
+      setEmail("");
+    } catch (err) {
+      console.error("Subscription error:", err.message);
+      setStatusMessage("❌ Failed to subscribe. Try again.");
+    }
+  };
+
+
   return (
     <div>
       {/* Hero Section */}
@@ -185,33 +202,21 @@ const LandingPage = () => {
   </div>
 </section>
 
-
-      {/* Pricing / Call to Action
-      <section className="bg-indigo-700 text-white py-20">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">Start Free, Upgrade Anytime</h2>
-          <p className="text-lg mb-6">
-            Whether you’re just getting started or ready to go pro, we’ve got a plan for you.
-          </p>
-          <button className="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-100">
-            View Pricing
-          </button>
-        </div>
-      </section> */}
-
-      {/* email section  */}
+  {/* email section  */}
      <div className="flex flex-col items-center justify-center text-center space-y-2 my-32 ">
   <h1 className="md:text-4xl text-2xl font-semibold">Never Miss a Blog!</h1>
   <p className="md:text-lg text-gray-900/70 pb-8">
     Subscribe to get the latest blog, new tech, and exclusive news.
   </p>
 
-  <form className="flex items-center justify-between max-w-2xl w-full md:h-13 h-12">
+  <form onSubmit={handleSubscribe} className="flex items-center justify-between max-w-2xl w-full md:h-13 h-12">
     <input
       className="border border-gray-500 h-full outline-none w-full rounded-l-md rounded-r-none px-3 text-gray-600"
       placeholder="Enter your email id"
       required
       type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
     />
     <button
       type="submit"
@@ -219,9 +224,9 @@ const LandingPage = () => {
     >
       Subscribe
     </button>
-  </form>
+        </form>
+        {statusMessage && <p className="mt-2 text-sm text-green-600">{statusMessage}</p>}
 </div>
-
       
     </div>
   );
