@@ -41,7 +41,7 @@ app.use('/api/blogs', require('./routes/blogRoutes'));
 app.use('/api/comments', require('./routes/commentRoutes'));
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/admin', require('./routes/adminRoutes'));
-
+app.use('/api/contact',  require('./routes/contactRoutes'));
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
