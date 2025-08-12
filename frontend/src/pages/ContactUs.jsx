@@ -34,7 +34,7 @@ const [formData, setFormData] = useState({
 
   return (
     <section className="bg-white py-12 px-4" id="contact">
-      <div className="max-w-6xl min-h-4xl mx-auto grid md:grid-cols-2 gap-8 bg-white rounded-2xl shadow-2xl shadow-blue-900 p-8">
+      <div className="max-w-6xl min-h-4xl mx-auto grid md:grid-cols-2 gap-8 bg-white rounded-2xl shadow-2xl shadow-purple-900 p-8">
         {/* Left side - Contact Info */}
         <div className="flex flex-col justify-center">
           <h2
@@ -76,7 +76,7 @@ bg-clip-text text-transparent mb-4
               type="text"
               name="Fullname"
               placeholder="Your Full Name"
-              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
               value={formData.Fullname}
               onChange={handleChange}
             />
@@ -90,7 +90,7 @@ bg-clip-text text-transparent mb-4
               type="email"
               name="email"
               placeholder="you@example.com"
-              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
               value={formData.email}
               onChange={handleChange}
             />
@@ -103,7 +103,7 @@ bg-clip-text text-transparent mb-4
               rows="4"
               name="subject"
               placeholder="Your Subject..."
-              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
               value={formData.subject}
               onChange={handleChange}
             ></textarea>
@@ -117,7 +117,7 @@ bg-clip-text text-transparent mb-4
               rows="4"
               name="message"
               placeholder="Your message..."
-              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
               value={formData.message}
               onChange={handleChange}
             ></textarea>
@@ -125,7 +125,17 @@ bg-clip-text text-transparent mb-4
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+            className="w-full cursor-pointer bg-gradient-to-r 
+           from-indigo-600 from-[5%] 
+           via-purple-500 via-[45%] 
+           to-pink-800 to-[100%] 
+           text-white font-semibold py-3 rounded-lg 
+           hover:bg-gradient-to-l 
+           hover:from-indigo-600 hover:from-[5%] 
+           hover:via-purple-500 hover:via-[35%] 
+           hover:to-pink-800 hover:to-[80%] 
+           transition duration-300"
+
           >
             Send Message
           </button>
