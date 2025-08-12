@@ -41,7 +41,8 @@ const api = axios.create({
 // Subscriber
 export const subscribeUser = async (data) => {
   try {
-    const res = await api.post("/api/subscribe", data);
+    const res = await api.post("/api/users/subscribe", data);
+    console.log(res.data);
     return res.data;
   } catch (error) {
     throw new Error(error.response?.data?.error || "Subscription failed");

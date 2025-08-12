@@ -9,6 +9,7 @@ const LandingPage = () => {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     try {
+      console.log("📤 Sending to backend:", { email })
       const res = await subscribeUser({ email }); // API call
       setStatusMessage("✅ Subscription successful!");
       setEmail("");
