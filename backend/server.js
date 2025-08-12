@@ -31,7 +31,7 @@ app.get('/api/auth/google',
 app.get('/api/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    // Send token / redirect to frontend
+    
     res.redirect(`http://localhost:3000?user=${JSON.stringify(req.user)}`);
   }
 );
