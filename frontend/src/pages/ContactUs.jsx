@@ -3,7 +3,7 @@ import { sendContactMessage } from '../services/api';
 const ContactUs = () => {
 
 const [formData, setFormData] = useState({
-    Fullname: "",
+    name: "",
     email: "",
     subject: "",
     message: ""
@@ -25,7 +25,7 @@ const [formData, setFormData] = useState({
     const res = await sendContactMessage(formData);
     setStatusMessage("✅ Message sent successfully!");
     alert("✅ Message sent successfully!");
-    setFormData({ Fullname: "", email: "", subject: "", message: "" });
+    setFormData({ name: "", email: "", subject: "", message: "" });
   } catch (err) {
     console.error("Contact error:", err.message);
     setStatusMessage("❌ " + err.message);
@@ -74,10 +74,10 @@ bg-clip-text text-transparent mb-4
             </label>
             <input
               type="text"
-              name="Fullname"
+              name="name"
               placeholder="Your Full Name"
               className="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              value={formData.Fullname}
+              value={formData.name}
               onChange={handleChange}
             />
           </div>
