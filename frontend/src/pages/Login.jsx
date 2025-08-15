@@ -47,7 +47,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await loginUser(loginData);
-      console.log("Login Success:", res);
+     
        alert("Login Successful");
       
     } catch (err) {
