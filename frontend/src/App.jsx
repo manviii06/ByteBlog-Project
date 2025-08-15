@@ -5,6 +5,10 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ContactUs from "./pages/ContactUs";
 import Login from './pages/Login';
+import BlogList from './components/BlogList';
+import BlogDetail from './components/BlogDetail';
+import AllBlogs from "./pages/AllBlogs";
+import SingleBlog from "./pages/SingleBlog";
 
 function App() {
   return (
@@ -15,6 +19,10 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/Login" element={<Login />} />
+        <Route path="/blogs" element={<BlogList />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route path="/all-blogs" element={<AllBlogs />} />
+        <Route path="/all-blogs/:id" element={<SingleBlog />} />
       </Routes>
 
       <Footer />

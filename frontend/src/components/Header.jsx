@@ -87,6 +87,8 @@ const Header = () => {
                     scrollToSection('features-section');
                   } else if (text === 'Contact') {
                     navigate('/Contact-us');
+                  } else if (text === 'All Blogs') {
+                    navigate('/all-blogs');
                   }
                 }}
                 className="relative cursor-pointer text-xl font-serif text-purple-700 

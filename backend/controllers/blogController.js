@@ -13,7 +13,7 @@ exports.createBlog = async (req, res) => {
 exports.getBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find().populate('author', 'name');
-    res.json(blogs);
+    res.json(blogs).sort({ createdAt: -1 });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -78,3 +78,25 @@ exports.toggleLikeBlog = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+exports.getAllBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find().populate('author', 'name');
+    res.json(blogs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getSingleBlog = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const blog = await Blog.findById(id).populate('author', 'name');
+    if (!blog) return res.status(404).json({ message: 'Blog not found' });
+
+    res.json(blog);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+}
