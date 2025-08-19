@@ -67,6 +67,7 @@ const navigate = useNavigate();
     setError("");
     try {
       const res = await loginUser(loginData);
+
       console.log("Sending loginData:", loginData);
       const { token, role, user, _id } = res.data;
 
@@ -79,6 +80,8 @@ const navigate = useNavigate();
 
       window.dispatchEvent(new Event("authChanged"));
       alert("Login Successful");
+
+    
       
       if (role === "admin") {
         navigate("/admin/dashboard");
