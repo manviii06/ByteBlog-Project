@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import { signupUser, loginUser, googleSignIn } from "../services/api";
-
+import { useNavigate } from "react-router-dom";
 const signupInitialValues = {
   firstName: "",
   lastName: "",
   username: "",
   password: "",
   email: "",
-  role: "",
   state: "",
   city: "",
+  country:"",
   pincode: "",
   bio: "",
 };
@@ -18,8 +18,9 @@ const signupInitialValues = {
 const Login = () => {
   const [account, toggleAccount] = useState("login");
   const [signup, setSignup] = useState(signupInitialValues);
-  const [loginData, setLoginData] = useState({ username: "", password: "" });
-
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+const navigate = useNavigate();
   const toggleSignup = () => {
     account === "signup" ? toggleAccount("login") : toggleAccount("signup");
   };
@@ -33,23 +34,64 @@ const Login = () => {
   };
 
   const handleSignup = async () => {
+    setError("");
     try {
       const res = await signupUser(signup);
-      console.log("Signup Success:", res);
+
+      if(res.status === 201){
+        console.log("Signup Success:", res);
       alert("Signup Successful");
-      
+      navigate('/login');
+      } else{
+        setError("Unexpected response from server.");
+      }
+
     } catch (err) {
-      console.error("Signup Failed:", err);
-      alert("Signup Failed: " + (err.response?.data || err.message));
+      alert("Registration Failed: " + (err.response?.data || err.message));
+      console.error("❌ Error details:", err.response?.data || err.message);
+
+      if (
+        err.response?.status === 400 &&
+        err.response.data === "User already exists"
+      ) {
+        alert("User already exists. Please try signing in.");
+        setError("This email is already registered. Try signing in.");
+      } else {
+        setError("Registration failed. Please try again.");
+      }
     }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
     try {
       const res = await loginUser(loginData);
-      console.log("Login Success:", res);
-       alert("Login Successful");
+      console.log("Sending loginData:", loginData);
+      const { token, role, user, _id } = res.data;
+
+       localStorage.setItem("authToken", token);
+       localStorage.setItem("userRole", role); 
+       localStorage.setItem('firstName', user.firstName);  
+       localStorage.setItem('lastName', user.lastName);  
+       localStorage.setItem('userEmail', user.email);  
+       localStorage.setItem("userId", _id);
+
+      window.dispatchEvent(new Event("authChanged"));
+      alert("Login Successful");
       
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (role === "user") {
+        setTimeout(() => {
+          navigate("/user-dashboard");
+          window.location.reload();
+          navigate(0);
+        }, 100);
+      } else {
+        setError("Unknown role. Contact administrator.");
+      }
+
     } catch (err) {
       console.error("Login Failed:", err);
       alert("Login Failed: " + (err.response?.data || err.message));
@@ -123,7 +165,7 @@ const Login = () => {
 
             <div className="flex gap-4">
               <input type="email" name="email" placeholder="Email" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
-              <input type="text" name="role" placeholder="Role" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
+              <input type="text" name="country" placeholder="Country" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
             </div>
 
             <div className="flex gap-4">

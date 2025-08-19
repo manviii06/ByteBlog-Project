@@ -1,5 +1,6 @@
 import "./index.css";
-import { Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import LandingPage from "./pages/LandingPage"; 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -9,30 +10,51 @@ import BlogList from './components/BlogList';
 import BlogDetail from './components/BlogDetail';
 import AllBlogs from "./pages/AllBlogs";
 import SingleBlog from "./pages/SingleBlog";
-
+import UserDashboard from "./pages/UserDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLayout from "./layouts/AdminLayout";
+import UserLayout from "./layouts/UserLayout";
 import ForgetPassword from './pages/ForgetPassword';
 
 
 function App() {
+
+  const [userRole, setUserRole] = useState(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+  }, [location]);
+
   return (
     <>
-      <Header />
+      {userRole !== 'admin' && <Header />
+}
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/Login" element={<Login />} />
-
+        <Route path="/login" element={<Login />} />
         <Route path="/blogs" element={<BlogList />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
         <Route path="/all-blogs" element={<AllBlogs />} />
         <Route path="/all-blogs/:id" element={<SingleBlog />} />
-
         <Route path="/ForgetPwd" element={<ForgetPassword />} />
-
+        {userRole === 'admin' && (
+         <Route element={<AdminLayout />} >
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+         </Route>
+        )}
+        {userRole === 'user' && (
+          <Route element={<UserLayout />} >
+            <Route path="/user-dashboard" element={<UserDashboard />} />
+          </Route>
+        )
+        }
       </Routes>
-
-      <Footer />
+      {console.log("userRole:", userRole)}
+      {userRole !== 'admin' && <Footer />}
     </>
   );
 }

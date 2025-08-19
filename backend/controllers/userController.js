@@ -2,6 +2,7 @@ const Blog = require("../models/Blog");
 const User = require("../models/User");
 const Subscriber = require("../models/Subscriber");
 const nodemailer = require("nodemailer");
+const Comment = require("../models/Comment");
 
 exports.getProfile = async (req, res) => {
   res.status(200).json(req.user);

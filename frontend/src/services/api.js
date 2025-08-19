@@ -1,50 +1,48 @@
 import axios from "axios";
 
-// Create a reusable axios instance with a base URL
 const api = axios.create({
-  baseURL: "http://localhost:5000", // Change for production
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: "http://localhost:5000/api"
+  
 });
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("authToken");
 
-/* ===========================
-   AUTH APIs
-=========================== */
+    if (config.requiresAuth && token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
 
-// Signup
-export const signupUser = async (userData) => {
-  try {
-    const res = await api.post("/api/auth/register", userData);
-    return res.data;
-  } catch (err) {
-    console.error("Signup Error:", err.response?.data || err.message);
-    throw err;
-  }
-};
+    if (config.contentType) {
+      config.headers["Content-Type"] = config.contentType;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 
 // Login
-export const loginUser = async (credentials) => {
-  try {
-    const res = await api.post("/api/auth/login", credentials);
+export const loginUser = (credentials) =>  api.post("/auth/login", credentials, {
+    headers: { "Content-Type": "application/json" }
+  });
+
+// Signup
+export const signupUser = (userData) => api.post("/auth/register", userData);
+
+
     
-   console.log(res.data);
-    return res.data;
-  } catch (err) {
-    console.error("Login Error:", err.response?.data || err.message);
-    throw err;
-  }
-};
+   
 
 // FORGOT PASSWORD FLOW
 export const sendOtp = (email) =>
-  api.post('/api/auth/send-otp', { email });
+  api.post('/auth/send-otp', { email });
 
 export const verifyOtp = (email, otp) =>
-  api.post('/api/auth/verify-otp', { email, otp });
+  api.post('/auth/verify-otp', { email, otp });
 
 export const resetPassword = (email, newPassword) =>
-  api.post('/api/auth/reset-password', { email, newPassword });
+  api.post('/auth/reset-password', { email, newPassword });
 
 // Google Sign-in Redirect
 export const googleSignIn = () => {
@@ -54,7 +52,7 @@ export const googleSignIn = () => {
 // Get Logged-in User
 export const getCurrentUser = async () => {
   try {
-    const res = await api.get("/api/auth/me");
+    const res = await api.get("/auth/me");
     return res.data;
   } catch (err) {
     console.error("Fetch User Error:", err.response?.data || err.message);
@@ -67,7 +65,7 @@ export const getCurrentUser = async () => {
 =========================== */
 export const subscribeUser = async (data) => {
   try {
-    const res = await api.post("/api/users/subscribe", data);
+    const res = await api.post("/users/subscribe", data);
     return res.data;
   } catch (error) {
     throw new Error(error.response?.data?.error || "Subscription failed");
@@ -79,7 +77,7 @@ export const subscribeUser = async (data) => {
 =========================== */
 export const sendContactMessage = async (formData) => {
   try {
-    const res = await api.post("/api/contact", formData);
+    const res = await api.post("/contact", formData);
     return res.data;
   } catch (error) {
     throw new Error(error.response?.data?.error || "Something went wrong");
@@ -87,4 +85,7 @@ export const sendContactMessage = async (formData) => {
 };
 
 export const fetchContactMessages = () =>
-  api.get("/api/admin/contact", { requiresAuth: true });
+  api.get("/admin/contact", { requiresAuth: true });
+
+export const fetchUserDashboard = () =>
+  api.get("/users/dashboard", { requiresAuth: true });
