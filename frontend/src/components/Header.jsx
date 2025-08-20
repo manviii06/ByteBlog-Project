@@ -8,15 +8,33 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
 
-  // Check login status on component mount
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setIsLoggedIn(true);
-      setUserName(user.name || 'User');
-    }
-  }, []);
+ useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    const user = JSON.parse(storedUser);
+    setIsLoggedIn(true);
+    setUserName(user.firstName || "User");
+  } else {
+    setIsLoggedIn(false);
+    setUserName("");
+  }
+}, []);
+
+useEffect(() => {
+  const firstName = localStorage.getItem("firstName");
+  const lastName = localStorage.getItem("lastName");
+  const email = localStorage.getItem("userEmail");
+
+  if (firstName && email) {
+    setIsLoggedIn(true);
+    setUserName(firstName + " " + (lastName || ""));
+  } else {
+    setIsLoggedIn(false);
+    setUserName("");
+  }
+}, []);
+  
+
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -29,6 +47,12 @@ const Header = () => {
   };
 
   const handleLogout = () => {
+      localStorage.removeItem("authToken");
+  localStorage.removeItem("userRole");
+  localStorage.removeItem("firstName");
+  localStorage.removeItem("lastName");
+  localStorage.removeItem("userEmail");
+  localStorage.removeItem("userId");
     localStorage.removeItem('user');
     setIsLoggedIn(false);
     navigate('/');
