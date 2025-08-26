@@ -23,7 +23,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchInsights = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/insights", {
+        const res = await axios.get("https://byteblog-wfa2.onrender.com/api/admin/insights", {
           withCredentials: true,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,

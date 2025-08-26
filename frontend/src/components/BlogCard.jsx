@@ -12,7 +12,7 @@ const BlogCard = ({ blog }) => {
             src={
               blog.imageURL.startsWith("http")
                 ? blog.imageURL
-                : `http://localhost:5000${blog.imageURL}`
+                : `https://byteblog-wfa2.onrender.com${blog.imageURL}`
             }
             alt={blog.title}
             className="w-full h-full object-cover"

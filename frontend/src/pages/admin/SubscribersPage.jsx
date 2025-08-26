@@ -11,7 +11,7 @@ export default function SubscribersPage() {
       try {
         const token = localStorage.getItem("authToken");
         const { data } = await axios.get(
-          "http://localhost:5000/api/admin/get-subscribers",
+          "https://byteblog-wfa2.onrender.com/api/admin/get-subscribers",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSubscribers(data || []); // data itself is an array

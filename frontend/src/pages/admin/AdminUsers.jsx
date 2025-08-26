@@ -14,7 +14,7 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const res = await axios.get('http://localhost:5000/api/admin/users', {
+        const res = await axios.get('https://byteblog-wfa2.onrender.com/api/admin/users', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data.users);
@@ -45,7 +45,7 @@ const AdminUsers = () => {
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
                   {user.profilePicture ? (
                     <img
-                      src={`http://localhost:5000/uploads/${user.profilePicture}`}
+                      src={`https://byteblog-wfa2.onrender.com/uploads/${user.profilePicture}`}
                       alt={user.username}
                       className="w-full h-full object-cover"
                     />

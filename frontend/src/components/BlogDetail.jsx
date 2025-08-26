@@ -89,7 +89,7 @@ export default function BlogDetail() {
       src={
         blog.imageURL?.startsWith("http")
           ? blog.imageURL
-          : `http://localhost:5000${blog.imageURL}`
+          : `https://byteblog-wfa2.onrender.com${blog.imageURL}`
       }
       alt={blog.title}
       className="w-full h-96 object-cover rounded-2xl transform hover:scale-105 transition duration-500 ease-in-out"

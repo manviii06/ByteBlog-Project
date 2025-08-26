@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: "https://byteblog-wfa2.onrender.com/api"
   
 });
 api.interceptors.request.use(
@@ -46,7 +46,7 @@ export const resetPassword = (email, newPassword) =>
 
 // Google Sign-in Redirect
 export const googleSignIn = () => {
-  window.location.href = "http://localhost:5000/api/auth/google";
+  window.location.href = "https://byteblog-wfa2.onrender.com/api/auth/google";
 };
 
 // Get Logged-in User

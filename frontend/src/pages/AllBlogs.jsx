@@ -16,7 +16,7 @@ const BlogCard = ({ post }) => {
       {post.imageURL && (
         <div className="w-full md:w-48 h-48 md:h-auto flex-shrink-0">
           <img
-            src={post.imageURL.startsWith("http") ? post.imageURL : `http://localhost:5000${post.imageURL}`}
+            src={post.imageURL.startsWith("http") ? post.imageURL : `https://byteblog-wfa2.onrender.com${post.imageURL}`}
             alt={post.title}
             className="w-full h-full object-cover"
           />
@@ -46,7 +46,7 @@ const BlogCard = ({ post }) => {
         <div className="flex items-center gap-3 text-gray-500 text-sm mb-3">
           {post.author?.profilePicture ? (
             <img
-              src={`http://localhost:5000/${post.author.profilePicture}`}
+              src={`https://byteblog-wfa2.onrender.com/${post.author.profilePicture}`}
               alt={post.author.username}
               className="w-7 h-7 rounded-full object-cover"
             />
@@ -99,7 +99,7 @@ const AllBlogs = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/blogs/blogs")
+      .get("https://byteblog-wfa2.onrender.com/api/blogs/blogs")
       .then((res) => {
         setBlogs(res.data);
         setFilteredBlogs(res.data);

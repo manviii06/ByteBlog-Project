@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",  // your React app
+    origin: "https://byteblog-wfa2.onrender.com",  // your React app
     credentials: true,                // allow cookies/session
   })
 );

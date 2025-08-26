@@ -23,7 +23,7 @@ const ProfilePage = () => {
         const token = localStorage.getItem("authToken");
         if (!token) return setLoading(false);
 
-        const res = await axios.get("http://localhost:5000/api/users/profile", {
+        const res = await axios.get("https://byteblog-wfa2.onrender.com/api/users/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -53,7 +53,7 @@ const ProfilePage = () => {
 
       const token = localStorage.getItem("authToken");
       const res = await axios.post(
-        "http://localhost:5000/api/users/upload",
+        "https://byteblog-wfa2.onrender.com/api/users/upload",
         formData,
         {
           headers: {
@@ -78,7 +78,7 @@ const ProfilePage = () => {
       setLoading(true);
       const token = localStorage.getItem("authToken");
       const res = await axios.put(
-        "http://localhost:5000/api/users/profile",
+        "https://byteblog-wfa2.onrender.com/api/users/profile",
         user,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -107,7 +107,7 @@ const ProfilePage = () => {
         <div className="relative">
           {user?.profilePicture ? (
             <img
-              src={`http://localhost:5000/uploads/${user.profilePicture}`}
+              src={`https://byteblog-wfa2.onrender.com/uploads/${user.profilePicture}`}
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
             />

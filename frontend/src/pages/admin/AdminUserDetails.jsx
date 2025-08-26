@@ -14,7 +14,7 @@ const AdminUserDetails = () => {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:5000/api/admin/users/${id}`, {
+        const res = await axios.get(`https://byteblog-wfa2.onrender.com/api/admin/users/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);

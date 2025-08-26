@@ -17,7 +17,7 @@ export default function BlogList() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/blogs");
+      const res = await axios.get("https://byteblog-wfa2.onrender.com/api/blogs");
       setBlogs(res.data);
     } catch (err) {
       console.error("Error fetching blogs:", err);
@@ -27,7 +27,7 @@ export default function BlogList() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this blog?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      await axios.delete(`https://byteblog-wfa2.onrender.com/api/blogs/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setBlogs((prev) => prev.filter((b) => b._id !== id));
