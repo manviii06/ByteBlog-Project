@@ -16,10 +16,9 @@ import AdminLayout from "./layouts/AdminLayout";
 import UserLayout from "./layouts/UserLayout";
 import ForgetPassword from './pages/ForgetPassword';
 
-// ✅ import ProfilePage
-import ProfilePage from "./pages/ProfilePage";
 
 function App() {
+
   const [userRole, setUserRole] = useState(null);
   const location = useLocation();
 
@@ -30,7 +29,8 @@ function App() {
 
   return (
     <>
-      {userRole !== 'admin' && <Header />}
+      {userRole !== 'admin' && <Header />
+}
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -41,23 +41,18 @@ function App() {
         <Route path="/all-blogs" element={<AllBlogs />} />
         <Route path="/all-blogs/:id" element={<SingleBlog />} />
         <Route path="/ForgetPwd" element={<ForgetPassword />} />
-
-        {/* ✅ Profile route added */}
-        <Route path="/profile" element={<ProfilePage />} />
-
         {userRole === 'admin' && (
-          <Route element={<AdminLayout />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          </Route>
+         <Route element={<AdminLayout />} >
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+         </Route>
         )}
-
         {userRole === 'user' && (
-          <Route element={<UserLayout />}>
+          <Route element={<UserLayout />} >
             <Route path="/user-dashboard" element={<UserDashboard />} />
           </Route>
-        )}
+        )
+        }
       </Routes>
-
       {console.log("userRole:", userRole)}
       {userRole !== 'admin' && <Footer />}
     </>

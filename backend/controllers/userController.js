@@ -8,46 +8,17 @@ exports.getProfile = async (req, res) => {
   res.status(200).json(req.user);
 };
 
-// exports.updateProfile = async (req, res) => {
-//   const { name, email } = req.body;
-//   const user = await User.findById(req.user._id);
-
-//   if (user) {
-//     user.name = name || user.name;
-//     user.email = email || user.email;
-//     const updatedUser = await user.save();
-//     res.status(200).json(updatedUser);
-//   } else {
-//     res.status(404).json({ message: "User not found" });
-//   }
-// };
-
-
 exports.updateProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
+  const { name, email } = req.body;
+  const user = await User.findById(req.user._id);
 
-    if (user) {
-      // Update all fields if provided
-      user.firstName = req.body.firstName || user.firstName;
-      user.lastName = req.body.lastName || user.lastName;
-      user.username = req.body.username || user.username;
-      user.email = req.body.email || user.email;
-      user.bio = req.body.bio || user.bio;
-      user.profilePicture = req.body.profilePicture || user.profilePicture;
-
-      const updatedUser = await user.save();
-
-      // send proper structure
-      res.status(200).json({
-        message: "Profile updated successfully",
-        user: updatedUser,   // 👈 ab frontend pe res.data.user milega
-      });
-    } else {
-      res.status(404).json({ message: "User not found" });
-    }
-  } catch (err) {
-    res.status(500).json({ message: "Error updating profile", error: err.message });
+  if (user) {
+    user.name = name || user.name;
+    user.email = email || user.email;
+    const updatedUser = await user.save();
+    res.status(200).json(updatedUser);
+  } else {
+    res.status(404).json({ message: "User not found" });
   }
 };
 
