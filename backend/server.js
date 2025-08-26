@@ -12,7 +12,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",  // your React app
+    credentials: true,                // allow cookies/session
+  })
+);
 app.use(express.json());
 
 connectDB();
@@ -37,12 +42,15 @@ app.get('/api/auth/google/callback',
   }
 );
 
+const path = require("path");
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(process.cwd(), "/uploads")));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/blogs', require('./routes/blogRoutes')); 
-app.use('/api/comments', require('./routes/commentRoutes'));
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/admin', require('./routes/adminRoutes'));
-app.use('/api/contact',  require('./routes/contactRoutes'));
+app.use('/api/admin/contact',  require('./routes/contactRoutes'));
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

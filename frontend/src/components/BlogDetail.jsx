@@ -1,348 +1,228 @@
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { FaTrash, FaEdit, FaThumbsUp } from "react-icons/fa";
+import BlogEditor from "./BlogEditor";
 import {
-  FaTrash,
-  FaEdit,
-  FaThumbsUp,
-  FaThumbsDown,
-  FaCommentDots,
-  FaShare,
-  FaReply,
-  FaSmile,
-} from "react-icons/fa";
-import { deleteBlog } from "./blogsSlice";
-import BlogEditor from "./BlogEditor"; 
-
-
-const emojiReactions = [
-  { label: "😊", value: "happy" },
-  { label: "😂", value: "laugh" },
-  { label: "😍", value: "love" },
-  { label: "😢", value: "sad" },
-  { label: "😡", value: "angry" },
-  { label: "👍", value: "like" },
-  { label: "🎉", value: "celebrate" },
-];
-
+  deleteBlog,
+  
+  fetchBlogById,
+  toggleLikeBlog,
+  addComment,
+} from "../services/api"; // 👈 import your api.js
 export default function BlogDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const blog = useSelector((state) => state.blogs.find((b) => b.id === id));
-
-  const [comments, setComments] = useState([]);
-  const [name, setName] = useState("");
-  const [text, setText] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [replyToId, setReplyToId] = useState(null);
-  const [activeEmojiPicker, setActiveEmojiPicker] = useState(null);
+  const [blog, setBlog] = useState(null);
   const [likes, setLikes] = useState(0);
-  const [dislikes, setDislikes] = useState(0);
-
   const [showEditor, setShowEditor] = useState(false);
-
-  const storageKey = `comments_${id}`;
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    const storedComments = JSON.parse(localStorage.getItem(storageKey));
-    if (storedComments) setComments(storedComments);
+    fetchBlog();
   }, [id]);
 
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(comments));
-  }, [comments, storageKey]);
-
-  if (!blog) {
-    return (
-      <div className="text-center text-gray-500">
-        Blog not found. <Link to="/">Go back</Link>
-      </div>
-    );
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!name.trim() || !text.trim()) return;
-
-    const newComment = {
-      id: uuidv4(),
-      name,
-      text,
-      date: new Date().toISOString(),
-      likes: 0,
-      emoji: null,
-      replies: [],
-    };
-
-    if (editingId) {
-      setComments((prev) =>
-        prev.map((c) => (c.id === editingId ? { ...c, text, name } : c))
-      );
-    } else if (replyToId) {
-      setComments((prev) =>
-        prev.map((c) =>
-          c.id === replyToId
-            ? { ...c, replies: [...c.replies, newComment] }
-            : c
-        )
-      );
-    } else {
-      setComments((prev) => [...prev, newComment]);
+  const fetchBlog = async () => {
+    try {
+      const res = await fetchBlogById(id);
+      setBlog(res.data);
+      setLikes(res.data.likes?.length || 0);
+      setComments(res.data.comments || []);
+    } catch (err) {
+      console.error("Error fetching blog:", err);
     }
-
-    setName("");
-    setText("");
-    setEditingId(null);
-    setReplyToId(null);
   };
 
-  const handleDeleteBlog = () => {
-    if (window.confirm("Are you sure you want to delete this blog?")) {
-      dispatch(deleteBlog(id));
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this blog?")) return;
+    try {
+      await deleteBlog(blog._id)
       navigate("/");
+    } catch (err) {
+      console.error("Error deleting blog:", err);
     }
   };
 
-  const renderReplies = (replies) =>
-    replies?.map((r) => (
-      <div key={r.id} className="ml-6 mt-2 p-2 border rounded bg-gray-50">
-        <p className="font-semibold">{r.name}</p>
-        <p>{r.text}</p>
-        <p className="text-gray-400 text-xs">
-          {new Date(r.date).toLocaleString()}
-        </p>
-        {r.emoji && <p className="text-xl">{r.emoji}</p>}
-      </div>
-    ));
+  const toggleLike = async () => {
+    try {
+      const res = await toggleLikeBlog(id);
+      setLikes(res.data.totalLikes);
+    } catch (err) {
+      console.error("Error liking blog:", err);
+    }
+  };
+
+
+  const handleAddComment = async () => {
+    if (!comment.trim()) return;
+    try {
+      const updatedComments = await addComment(id, comment);
+      setBlog((prev) => ({ ...prev, comments: updatedComments }));
+      setComment("");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  if (!blog) return <p className="text-center mt-20">Loading...</p>;
 
   return (
-    <div>
-      <Link to="/" className="text-blue-600 hover:underline mb-4 inline-block">
+    <div className="max-w-5xl mx-auto p-6">
+      <Link
+        to="/my-blogs"
+        className="text-blue-600 hover:underline mb-6 inline-block"
+      >
         ← Back to All Posts
       </Link>
 
-      <h1 className="text-3xl font-bold mb-4 truncate">
-        {blog.title.length > 100 ? blog.title.slice(0, 100) + "..." : blog.title}
+      {/* Blog Title */}
+      {/* Blog Title */}
+      <h1 className="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4">
+        {blog.title}
       </h1>
+      <div className="mb-12 flex flex-col md:flex-row md:items-start gap-10 p-6  ">
+  {/* Blog Image */}
+  <div className="relative w-full md:w-1/2 overflow-hidden rounded-2xl">
+    <img
+      src={
+        blog.imageURL?.startsWith("http")
+          ? blog.imageURL
+          : `http://localhost:5000${blog.imageURL}`
+      }
+      alt={blog.title}
+      className="w-full h-96 object-cover rounded-2xl transform hover:scale-105 transition duration-500 ease-in-out"
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl" />
+  </div>
 
-      <img
-        src={blog.image || "https://via.placeholder.com/600"}
-        alt={blog.title}
-        className="w-full h-80 object-cover rounded mb-3"
-      />
-
-    
-      <div className="flex justify-end gap-6 text-gray-700 mb-6 pr-4">
-        <button
-          onClick={() => setLikes((prev) => prev + 1)}
-          className="flex flex-col items-center text-xs hover:text-blue-600"
-        >
-          <FaThumbsUp size={18} />
-          <span>Like ({likes})</span>
-        </button>
-        <button
-          onClick={() => setDislikes((prev) => prev + 1)}
-          className="flex flex-col items-center text-xs hover:text-red-600"
-        >
-          <FaThumbsDown size={18} />
-          <span>Dislike ({dislikes})</span>
-        </button>
-        <a
-          href="#comment-section"
-          className="flex flex-col items-center text-xs hover:text-green-600"
-        >
-          <FaCommentDots size={18} />
-          <span>Comment</span>
-        </a>
-        <button
-          onClick={() => alert("Share functionality here")}
-          className="flex flex-col items-center text-xs hover:text-purple-600"
-        >
-          <FaShare size={18} />
-          <span>Share</span>
-        </button>
-
-        <button
-          onClick={() => setShowEditor(true)}
-          className="flex flex-col items-center text-xs hover:text-yellow-600"
-        >
-          <FaEdit size={18} />
-          <span>Edit</span>
-        </button>
-
-        <button
-          onClick={handleDeleteBlog}
-          className="flex flex-col items-center text-xs hover:text-red-600"
-        >
-          <FaTrash size={18} />
-          <span>Delete</span>
-        </button>
+  {/* Blog Info + Actions */}
+  <div className="flex flex-col justify-between gap-6 w-full md:w-1/2">
+    <div className="space-y-4">
+      {/* Category */}
+      <div className="flex items-center gap-3">
+        <span className="text-gray-600 font-medium">Category:</span>
+        <span className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full text-sm font-semibold shadow-md">
+          {blog.category}
+        </span>
       </div>
 
+      {/* Author */}
+      <div className="flex items-center gap-3">
+        <span className="text-gray-600 font-medium">Author:</span>
+        <span className="flex items-center gap-2">
+          
+          <span className="font-semibold text-gray-800">
+            {blog.author?.username || "Unknown"}
+          </span>
+        </span>
+      </div>
+
+      {/* Date */}
+      <div className="flex items-center gap-3">
+        <span className="text-gray-600 font-medium">Uploaded:</span>
+        <span className="px-2 py-1 bg-gray-100 rounded-md text-gray-700 shadow-sm">
+          {new Date(blog.createdAt).toLocaleDateString()}
+        </span>
+      </div>
+    </div>
+
+    {/* Action Buttons */}
+    <div className="flex gap-4 mt-4">
+      <button
+        onClick={toggleLike}
+        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg hover:bg-white text-indigo-600 font-medium transition"
+      >
+        <FaThumbsUp /> {likes}
+      </button>
+      <button
+        onClick={handleDelete}
+        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-red-50 text-red-600 shadow-md hover:bg-red-100 hover:shadow-lg font-medium transition"
+      >
+        <FaTrash /> Delete
+      </button>
+      <button
+        onClick={() => setShowEditor(true)}
+        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-50 text-blue-600 shadow-md hover:bg-blue-100 hover:shadow-lg font-medium transition"
+      >
+        <FaEdit /> Edit
+      </button>
+    </div>
+  </div>
+</div>
+
+      {/* Meta Info */}
+
+      {/* Blog Image */}
+
+
+      {/* Action Buttons */}
+
+
+      {/* Blog Content */}
       <div
-        className="text-gray-700 text-lg mb-6"
+        className="prose prose-lg max-w-none mb-12 text-gray-800 leading-relaxed"
         dangerouslySetInnerHTML={{ __html: blog.content }}
       />
 
 
-      <h2 className="text-xl font-bold mb-4" id="comment-section">
-        Comments ({comments.length})
-      </h2>
+      {/* Comment Section */}
+      <div className="border-t pt-6">
+        <h3 className="text-xl font-semibold mb-4">Comments</h3>
 
-      <div className="space-y-4 mb-6">
-        {comments.length === 0 ? (
-          <p>No comments yet.</p>
-        ) : (
-          comments.map((c) => (
-            <div key={c.id} className="border p-3 rounded bg-gray-50 relative">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-semibold">{c.name}</p>
-                  <p>{c.text}</p>
-                  <p className="text-gray-400 text-xs">
-                    {new Date(c.date).toLocaleString()}
-                  </p>
-                  {c.emoji && <p className="text-xl">{c.emoji}</p>}
-                  {renderReplies(c.replies)}
-                </div>
-                <div className="flex space-x-2">
-                  <button title="Reply" onClick={() => setReplyToId(c.id)}>
-                    <FaReply />
-                  </button>
-                  <button title="Edit" onClick={() => {
-                    setEditingId(c.id);
-                    setName(c.name);
-                    setText(c.text);
-                  }}>
-                    <FaEdit />
-                  </button>
-                  <button
-                    title="Delete"
-                    onClick={() =>
-                      setComments((prev) => prev.filter((cm) => cm.id !== c.id))
-                    }
-                  >
-                    <FaTrash />
-                  </button>
-                  <button
-                    title="Emoji"
-                    onClick={() =>
-                      setActiveEmojiPicker((prev) =>
-                        prev === c.id ? null : c.id
-                      )
-                    }
-                  >
-                    <FaSmile />
-                  </button>
-                </div>
-              </div>
-              {activeEmojiPicker === c.id && (
-                <div className="mt-2 flex gap-2 flex-wrap bg-white border p-2 rounded shadow-md absolute top-full left-0 z-10">
-                  {emojiReactions.map((emoji) => (
-                    <button
-                      key={emoji.value}
-                      onClick={() =>
-                        setComments((prev) =>
-                          prev.map((cm) =>
-                            cm.id === c.id ? { ...cm, emoji: emoji.label } : cm
-                          )
-                        )
-                      }
-                      className="text-xl hover:scale-125 transition-transform"
-                    >
-                      {emoji.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-3">
-        {replyToId && (
-          <p className="text-sm text-gray-600">
-            Replying...
-            <button
-              type="button"
-              className="text-red-500 underline"
-              onClick={() => setReplyToId(null)}
-            >
-              Cancel
-            </button>
-          </p>
-        )}
-        <input
-          type="text"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="border p-2 w-full rounded"
-        />
-        <textarea
-          placeholder={
-            editingId
-              ? "Update your comment..."
-              : replyToId
-              ? "Write your reply..."
-              : "Write your comment..."
-          }
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="border p-2 w-full rounded"
-          rows="3"
-        />
-        <div className="flex justify-between items-center">
+        {/* Comment Input */}
+        <div className="flex gap-4 mb-6">
+          <textarea
+            value={comment}
+            rows={1}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Write your comment..."
+            className="w-full peer border border-gray-300 rounded-2xl bg-white/70 backdrop-blur-md shadow-sm p-4 text-sm resize-none focus:border-blue-500 focus:ring-2 focus:ring-blue-400 outline-none transition-all"
+          />
           <button
-            type="submit"
-            className="bg-purple-600 text-white px-4 py-2 rounded"
+            onClick={handleAddComment}
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-2xl shadow-md hover:scale-105 hover:from-blue-700 hover:to-indigo-700 transition-all duration-200"
           >
-            {editingId ? "Update" : replyToId ? "Reply" : "Submit"}
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              setActiveEmojiPicker((prev) => (prev === "new" ? null : "new"))
-            }
-            title="Add Emoji"
-          >
-            <FaSmile className="text-2xl text-purple-600" />
+            Post
           </button>
         </div>
-        {activeEmojiPicker === "new" && (
-          <div className="mt-2 flex gap-2 flex-wrap border p-2 rounded shadow-md">
-            {emojiReactions.map((emoji) => (
-              <button
-                key={emoji.value}
-                type="button"
-                onClick={() => setText((prev) => prev + " " + emoji.label)}
-                className="text-xl hover:scale-125 transition-transform"
-              >
-                {emoji.label}
-              </button>
-            ))}
-          </div>
+
+        {/* Comment List */}
+        {blog.comments.length > 0 ? (
+          blog.comments.map((c) => (
+            <div
+              key={c._id}
+              className="bg-gradient-to-r from-indigo-50 via-white to-indigo-50 shadow-md rounded-xl p-4 mb-4 border border-gray-200 hover:shadow-lg transition-all duration-300"
+            >
+              <div className="flex items-center gap-3 mb-2">
+
+                <div>
+                  <p className="font-semibold text-gray-800">{c.user?.username}</p>
+                  <span className="text-xs text-gray-500">
+                    {new Date(c.createdAt).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+              <p className="text-gray-700 leading-relaxed">{c.text}</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500 italic text-center mt-4">
+            No comments yet. Be the first to comment!
+          </p>
         )}
-      </form>
 
 
+      </div>
+
+      {/* Blog Editor (Edit Mode) */}
       {showEditor && (
         <BlogEditor
-          onClose={() => setShowEditor(false)}
+          onClose={() => {
+            setShowEditor(false);
+            fetchBlog();
+          }}
           editBlog={blog}
         />
       )}

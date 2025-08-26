@@ -89,3 +89,65 @@ export const fetchContactMessages = () =>
 
 export const fetchUserDashboard = () =>
   api.get("/users/dashboard", { requiresAuth: true });
+
+// Get all blogs
+export const fetchBlogs = () => api.get("/blogs/blogs");
+
+// Get single blog by ID
+export const fetchBlogById = (id) => api.get(`/blogs/blogs/${id}`);
+
+// Create blog
+export const createBlog = (blogData) =>
+  api.post("/blogs", blogData, { requiresAuth: true });
+
+// Update blog
+export const updateBlog = (id, blogData) =>
+  api({
+    method: "put",
+    url: `/blogs/${id}`,
+    data: blogData,
+    requiresAuth: true,
+  });
+
+// Delete blog
+export const deleteBlog = (id) =>
+  api.delete(`/blogs/${id}`, { requiresAuth: true });
+
+// Like/unlike blog
+export const toggleLikeBlog = (id) =>
+  api.put(`/blogs/${id}/like`, {}, { requiresAuth: true });
+
+// Add comment
+export const addComment = (id, text) =>
+  api.post(`/blogs/${id}/comments`, { text }, { requiresAuth: true });
+
+export const fetchComments = (id) =>
+  api.get(`/comments/${id}`);
+
+// Delete comment
+export const deleteComment = (id, commentId) =>
+  api.delete(`/blogs/${id}/comments/${commentId}`, { requiresAuth: true });
+
+// Fetch logged-in user profile
+export const getUserProfile = async () => {
+  const res = await api.get("/users/profile", { requiresAuth: true }); // ✅ fixed path
+  return res.data.user;
+};
+
+// Update profile (text fields)
+export const updateUserProfile = async (userData) => {
+  const res = await api.put("/users/profile", userData, { requiresAuth: true }); // ✅ fixed path
+  return res.data;
+};
+
+// Upload profile picture
+export const uploadProfilePicture = async (imageFile) => {
+  const formData = new FormData();
+  formData.append("profilePic", imageFile);
+
+  const res = await api.put("/users/profile", formData, {
+    requiresAuth: true,
+    contentType: "multipart/form-data",
+  });
+  return res.data;
+};

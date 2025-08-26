@@ -109,13 +109,17 @@ exports.verifyOtp = (req, res) => {
 
 exports.resetPassword = async (req, res) => {
   const { email, newPassword } = req.body;
-  const user = await User.findOne({ email });
 
-  if (!user) return res.status(404).json({ message: "User not found" });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-  const hashed = await bcrypt.hash(newPassword, 10);
-  user.password_hash = hashed;
-  await user.save();
+    user.password = newPassword; // plain password
+    await user.save(); // pre-save hook will hash it
 
-  res.status(200).json({ message: "Password updated successfully" });
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };

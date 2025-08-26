@@ -15,8 +15,11 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import UserLayout from "./layouts/UserLayout";
 import ForgetPassword from './pages/ForgetPassword';
-
-
+import ProfilePage from "./pages/ProfilePage";
+import SubscribersPage from "./pages/admin/SubscribersPage";
+import AdminContact from "./pages/admin/AdminContact";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminUserDetails from "./pages/admin/AdminUserDetails";
 function App() {
 
   const [userRole, setUserRole] = useState(null);
@@ -44,11 +47,19 @@ function App() {
         {userRole === 'admin' && (
          <Route element={<AdminLayout />} >
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/subscribers" element={<SubscribersPage />} />
+          <Route path="/admin/contact" element={<AdminContact />} />
+          <Route path="/admin/admin-users" element={<AdminUsers />} />
+          <Route path="/admin/admin-users/:id" element={<AdminUserDetails />} />
+
          </Route>
         )}
         {userRole === 'user' && (
           <Route element={<UserLayout />} >
             <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/my-blogs" element={<BlogList />} />
+            <Route path="/blogs/:id" element={<BlogDetail />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
         )
         }

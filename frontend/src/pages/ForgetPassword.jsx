@@ -74,7 +74,7 @@ const ForgetPassword = () => {
       const response = await resetPassword(formData.email, formData.newPwd);
       console.log("Password reset response:", response.data);
       alert("Password has been reset successfully!");
-      navigate("/sign-in");
+      navigate("/login");
     } catch (error) {
       console.error("Password reset failed:", error);
       alert("Something went wrong. Please try again.");

@@ -13,10 +13,10 @@ const Footer = () => {
             className=" w-32 sm:w-44 mb-4 "
             src={assets.logo} // Make sure logo file is in your public folder or use import
           />
-            <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500">Blogging Platform</h1>
+            <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500">ByteBlog</h1>
             </div>
           <p className="max-w-md text-sm leading-relaxed mr-10 ">
-            Blogging platform empowers creators to share their voice, grow an audience, and monetize content with ease. Start your journey today.
+            ByteBlog empowers creators to share their voice, grow an audience, and monetize content with ease. Start your journey today.
           </p>
         </div>
 

@@ -71,7 +71,7 @@ useEffect(() => {
         className="w-1 h-18 sm:w-40 cursor-pointer transition-transform hover:scale-105"
       />
       <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500">
-        Blogging Platform
+        ByteBlog
       </h1>
     </div>
 
@@ -81,13 +81,14 @@ useEffect(() => {
       {/* Nav Links */}
       <nav className="flex space-x-6">
         {isLoggedIn
-          ? ['Dashboard', 'My Blogs', 'Profile'].map((text, i) => (
+          ? ['All Blogs','Dashboard', 'My Blogs', 'Profile', ].map((text, i) => (
               <button
                 key={i}
                 onClick={() => {
-                  if (text === 'Dashboard') navigate('/dashboard');
+                  if (text === 'Dashboard') navigate('/user-dashboard');
                   else if (text === 'My Blogs') navigate('/my-blogs');
                   else if (text === 'Profile') navigate('/profile');
+                  else if (text === 'All Blogs') navigate('/all-blogs');
                 }}
                 className="relative cursor-pointer text-xl font-serif text-purple-700 
                   hover:text-purple-800 transition-all duration-300

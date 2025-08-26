@@ -8,10 +8,10 @@ const signupInitialValues = {
   username: "",
   password: "",
   email: "",
-  state: "",
-  city: "",
-  country:"",
-  pincode: "",
+  // state: "",
+  // city: "",
+  // country:"",
+  // pincode: "",
   bio: "",
 };
 
@@ -147,12 +147,12 @@ const navigate = useNavigate();
               Create an account
             </button>
 
-            <button
+            {/* <button
               className="bg-gradient-to-r from-indigo-700 to-purple-400 text-white h-12 rounded"
               onClick={handleGoogleSignin}
             >
               Sign in with Google
-            </button>
+            </button> */}
           </div>
         ) : (
           <div className="p-6 flex flex-col space-y-5">
@@ -168,16 +168,16 @@ const navigate = useNavigate();
 
             <div className="flex gap-4">
               <input type="email" name="email" placeholder="Email" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
-              <input type="text" name="country" placeholder="Country" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
+              {/* <input type="text" name="country" placeholder="Country" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" /> */}
             </div>
 
-            <div className="flex gap-4">
+            {/* <div className="flex gap-4">
               <input type="text" name="state" placeholder="State" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
               <input type="text" name="city" placeholder="City" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
-            </div>
+            </div> */}
 
             <div className="flex gap-4">
-              <input type="text" name="pincode" placeholder="Pincode" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
+              {/* <input type="text" name="pincode" placeholder="Pincode" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" /> */}
               <input type="text" name="bio" placeholder="Bio" onChange={onInputChange} className="flex-1 border-b border-gray-400 focus:outline-none" />
             </div>
 
